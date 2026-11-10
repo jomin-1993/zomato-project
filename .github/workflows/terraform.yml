@@ -5,8 +5,7 @@ name: "Zomato Project"
 on:
   push:
     branches:
-      - vpc
-      - zomato-ec2
+      - hdin
 jobs:
   vpc-build:
     name: "VPC Build"
