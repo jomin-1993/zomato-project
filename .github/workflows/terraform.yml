@@ -6,15 +6,20 @@ on:
   push:
     branches:
       - hdin
+
+permissions:
+  contents: read
+
 jobs:
   vpc-build:
     name: "VPC Build"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      TF_IN_AUTOMATION: true
 
     steps:
       # Checkout source code
@@ -24,6 +29,8 @@ jobs:
       # Install Terraform
       - name: "Terraform Install"
         uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.13.3"
 
       # Check Terraform formatting
       - name: "Terraform Format"
@@ -31,16 +38,17 @@ jobs:
 
       # Initialize Terraform
       - name: "Terraform Init"
-        run: terraform init
-        working-directory: .
+        run: terraform init -input=false
 
       # Validate Terraform configuration
       - name: "Terraform Validate"
         run: terraform validate
-        working-directory: .
 
-      # Apply Terraform configuration
+      # Generate Terraform Plan
+      - name: "Terraform Plan"
+        run: terraform plan -input=false -out=tfplan
+
+      # Apply Terraform Configuration
       - name: "Terraform Apply"
-        run: terraform apply -auto-approve
-        working-directory: .
+        run: terraform apply -input=false -auto-approve tfplan
 
