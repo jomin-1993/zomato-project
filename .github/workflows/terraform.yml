@@ -44,5 +44,5 @@ jobs:
 
       # Apply Terraform Configuration
       - name: "Terraform Apply"
-        run: terraform apply -input=false -auto-approve tfplan
+        run: terraform apply --auto--approve
 
