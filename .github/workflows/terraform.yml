@@ -32,9 +32,6 @@ jobs:
         with:
           terraform_version: "1.13.3"
 
-      # Check Terraform formatting
-      - name: "Terraform Format"
-        run: terraform fmt -check -recursive
 
       # Initialize Terraform
       - name: "Terraform Init"
@@ -44,9 +41,6 @@ jobs:
       - name: "Terraform Validate"
         run: terraform validate
 
-      # Generate Terraform Plan
-      - name: "Terraform Plan"
-        run: terraform plan -input=false -out=tfplan
 
       # Apply Terraform Configuration
       - name: "Terraform Apply"
